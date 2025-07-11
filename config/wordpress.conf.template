@@ -1,0 +1,6 @@
+# WordPress installation configuration
+
+SITE_TITLE="My WordPress Site"
+ADMIN_USER="admin"
+ADMIN_EMAIL="admin@example.com"
+INSTALL_DIR="/var/www/html"
