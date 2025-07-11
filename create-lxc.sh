@@ -29,7 +29,7 @@ while echo "$existing_ctids" | grep -qw "$CTID"; do
 done
 
 # === Ask for Hostname + Last IP Octet ===
-read -p "Hostname: " HOSTNAME
+read -p "LXC name: " LXC_NAME
 read -p "Last octet of IP (e.g. 101): " IP_SUFFIX
 
 # === Build full IP ===
@@ -41,7 +41,7 @@ echo "Creating LXC CTID $CTID ($HOSTNAME) at $IP on VLAN $VLAN..."
 
 # === Create Container ===
 pct create "$CTID" "$TEMPLATE" \
-  -hostname "$HOSTNAME" \
+  -hostname "$LXC_NAME" \
   -net0 name=eth0,bridge=$BRIDGE,ip=${IP}/24,gw=${GATEWAY},tag=${VLAN} \
   -storage "$STORAGE" \
   -rootfs "$STORAGE:$DISK_SIZE" \
@@ -60,7 +60,7 @@ sleep 3
 pct exec "$CTID" -- bash -c "echo root:$ROOT_PW | chpasswd"
 
 # === Output result ===
-echo "$CTID,$HOSTNAME,$IP,$ROOT_PW" >> "$LOG_FILE"
+echo "$CTID,$LXC_NAME,$IP,$ROOT_PW" >> "$LOG_FILE"
 
 echo "✅ LXC $CTID created successfully"
 echo "   Hostname: $HOSTNAME"
