@@ -36,4 +36,11 @@ pct exec "$CTID" -- bash -c "
   DEBIAN_FRONTEND=noninteractive apt install -y $PACKAGES
 "
 
+pct exec "$CTID" -- bash -c "
+  wget -O /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg &&
+  echo \"deb https://packages.sury.org/php/ \$(lsb_release -sc) main\" > /etc/apt/sources.list.d/php.list &&
+  apt update
+  DEBIAN_FRONTEND=noninteractive apt install -y $PHP_EXTENSIONS
+"
+
 echo "✅ Finished provisioning CTID $CTID"
