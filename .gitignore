@@ -26,4 +26,7 @@ Thumbs.db
 config/lxc.conf
 config/packages.conf
 config/wordpress.conf
+config/nginx.http.conf
+config/nginx.https.conf
+config/rproxy.conf
 logs/*

@@ -1,0 +1,6 @@
+RPROXY_HOST="192.168.100.2"
+RPROXY_USER="proxyuser"
+RPROXY_SSH_PORT=22
+CERTBOT=true
+NGINX_CONF="/etc/nginx/rproxy/http/available/"
+NGINX_CONF_ENABLED="/etc/nginx/rproxy/http/enabled/"
