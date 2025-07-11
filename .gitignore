@@ -23,6 +23,7 @@ pip-wheel-metadata/
 Thumbs.db
 
 # Default configuration for LXC containers in Proxmox VE
-config/lxc-default.conf
-config/provision-default.conf
+config/lxc.conf
+config/packages.conf
+config/wordpress.conf
 logs/*
