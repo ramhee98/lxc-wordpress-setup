@@ -12,47 +12,58 @@ if [[ ! -f "$CONFIG_FILE" ]]; then
 fi
 source "$CONFIG_FILE"
 
-# === Determine Next CTID ===
+# === Validate required config values ===
+REQUIRED_VARS=(SUBNET GATEWAY STORAGE TEMPLATE BRIDGE DISK_SIZE MEMORY CORES SWAP CTID_START VLAN DNS)
+for VAR in "${REQUIRED_VARS[@]}"; do
+  if [[ -z "${!VAR}" ]]; then
+    echo "Config variable '$VAR' is missing or empty"
+    exit 1
+  fi
+done
+
+# === Determine Next Available CTID ===
 existing_ctids=$(pct list | awk 'NR>1 {print $1}' | sort -n)
 CTID=$CTID_START
 while echo "$existing_ctids" | grep -qw "$CTID"; do
   ((CTID++))
 done
 
-# === Get Inputs ===
+# === Ask for Hostname + Last IP Octet ===
 read -p "Hostname: " HOSTNAME
 read -p "Last octet of IP (e.g. 101): " IP_SUFFIX
-IP="${SUBNET}.${IP_SUFFIX}"
 
-# === Generate secure root password ===
-ROOT_PW=$(openssl rand -base64 64 | tr -dc 'A-Za-z0-9')
+# === Build full IP ===
+BASE_IP="${SUBNET%.*}"   # Removes trailing .0 if present
+IP="${BASE_IP}.${IP_SUFFIX}"
 
+# === Create LXC Container ===
 echo "Creating LXC CTID $CTID ($HOSTNAME) at $IP on VLAN $VLAN..."
 
 # === Create Container ===
 pct create "$CTID" "$TEMPLATE" \
   -hostname "$HOSTNAME" \
-  -net0 name=eth0,bridge=$BRIDGE,ip=${IP}/24,gw=${DNS},tag=${VLAN} \
+  -net0 name=eth0,bridge=$BRIDGE,ip=${IP}/24,gw=${GATEWAY},tag=${VLAN} \
   -storage "$STORAGE" \
   -rootfs "$STORAGE:$DISK_SIZE" \
   -cores "$CORES" \
   -memory "$MEMORY" \
+  -nameserver "$DNS" \
   -swap "$SWAP" \
   -unprivileged 1 \
   -features nesting=1 \
   -onboot 1
 
-# === Start + Set Root Password ===
+# === Start container and set root password ===
+ROOT_PW=$(openssl rand -base64 64 | tr -dc 'A-Za-z0-9')
 pct start "$CTID"
 sleep 3
-pct exec "$CTID" -- bash -c "echo root:'$ROOT_PW' | chpasswd"
+pct exec "$CTID" -- bash -c "echo root:$ROOT_PW | chpasswd"
 
-# === Log output ===
+# === Output result ===
 echo "$CTID,$HOSTNAME,$IP,$ROOT_PW" >> "$LOG_FILE"
 
-# === Done ===
-echo "✅ LXC $CTID ($HOSTNAME) created."
+echo "✅ LXC $CTID created successfully"
+echo "   Hostname: $HOSTNAME"
 echo "   IP: $IP"
 echo "   Root password: $ROOT_PW"
-echo "   Console: pct console $CTID or Web UI"
 echo "   Logged to: $LOG_FILE"
