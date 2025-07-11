@@ -24,4 +24,5 @@ Thumbs.db
 
 # Default configuration for LXC containers in Proxmox VE
 config/lxc-default.conf
+config/provision-default.conf
 logs/*
