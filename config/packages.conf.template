@@ -1,0 +1,8 @@
+# Should update + upgrade all packages before installing?
+AUTO_UPDATE=true
+
+# Default provisioning packages
+PACKAGES="apt-transport-https lsb-release ca-certificates wget curl gnupg2 apache2 mariadb-server apache2"
+
+# PHP to install
+PHP_EXTENSIONS="php8.4 php8.4-mysql php8.4-curl php8.4-mbstring php8.4-xml php8.4-xmlrpc"

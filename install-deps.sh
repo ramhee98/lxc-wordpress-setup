@@ -2,7 +2,7 @@
 
 # === Resolve Script Directory ===
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-CONFIG_FILE="${SCRIPT_DIR}/config/provision-default.conf"
+CONFIG_FILE="${SCRIPT_DIR}/config/packages.conf"
 
 # === Load Config ===
 if [[ ! -f "$CONFIG_FILE" ]]; then
