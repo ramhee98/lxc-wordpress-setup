@@ -1,0 +1,13 @@
+# LXC Container Default Config
+SUBNET="192.168.100.0"
+GATEWAY="192.168.100.1"
+STORAGE="disk1"
+TEMPLATE="disk1:vztmpl/debian-12-standard_12.7-1_amd64.tar.zst"
+BRIDGE="vmbr0"
+DISK_SIZE=2
+MEMORY=1024
+CORES=1
+SWAP=512
+CTID_START=201
+VLAN=100
+DNS="192.168.100.1"

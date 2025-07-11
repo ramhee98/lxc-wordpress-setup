@@ -2,7 +2,7 @@
 
 # === Resolve Script Directory ===
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-CONFIG_FILE="${SCRIPT_DIR}/config/lxc-default.conf"
+CONFIG_FILE="${SCRIPT_DIR}/config/lxc.conf"
 LOG_FILE="${SCRIPT_DIR}/logs/deployed-containers.csv"
 
 # === Load Config ===
