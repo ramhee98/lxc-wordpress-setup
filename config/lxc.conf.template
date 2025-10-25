@@ -4,6 +4,7 @@ GATEWAY="192.168.100.1"
 STORAGE="disk1"
 TEMPLATE="disk1:vztmpl/debian-12-standard_12.7-1_amd64.tar.zst"
 BRIDGE="vmbr0"
+FIREWALL=1
 DISK_SIZE=2
 MEMORY=1024
 CORES=1

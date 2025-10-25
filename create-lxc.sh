@@ -13,7 +13,7 @@ fi
 source "$CONFIG_FILE"
 
 # === Validate required config values ===
-REQUIRED_VARS=(SUBNET GATEWAY STORAGE TEMPLATE BRIDGE DISK_SIZE MEMORY CORES SWAP CTID_START VLAN DNS)
+REQUIRED_VARS=(SUBNET GATEWAY STORAGE TEMPLATE BRIDGE FIREWALL DISK_SIZE MEMORY CORES SWAP CTID_START VLAN DNS)
 for VAR in "${REQUIRED_VARS[@]}"; do
   if [[ -z "${!VAR}" ]]; then
     echo "Config variable '$VAR' is missing or empty"
@@ -42,7 +42,7 @@ echo "Creating LXC CTID $CTID ($HOSTNAME) at $IP on VLAN $VLAN..."
 # === Create Container ===
 pct create "$CTID" "$TEMPLATE" \
   -hostname "$LXC_NAME" \
-  -net0 name=eth0,bridge=$BRIDGE,ip=${IP}/24,gw=${GATEWAY},tag=${VLAN} \
+  -net0 name=eth0,bridge=$BRIDGE,firewall=$FIREWALL,ip=${IP}/24,gw=${GATEWAY},tag=${VLAN} \
   -storage "$STORAGE" \
   -rootfs "$STORAGE:$DISK_SIZE" \
   -cores "$CORES" \
