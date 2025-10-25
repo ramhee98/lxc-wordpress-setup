@@ -43,3 +43,5 @@ echo "▶️  Configuring reverse proxy..."
 echo -e "$DOMAIN\n$IP" | bash "$SCRIPT_DIR/configure-rproxy.sh"
 
 echo "✅ Provisioning complete for $DOMAIN (CTID $CTID, IP $IP)"
+
+echo "Don't forget to add firewall rules if necessary!"
