@@ -63,9 +63,14 @@ pct exec "$CTID" -- bash -c "
 "
 
 # Configure and install WordPress
+# --skip-salts: don't fetch salts from api.wordpress.org (fails silently behind
+# a firewall and leaves the placeholder text). We generate them locally instead.
 pct exec "$CTID" -- bash -c "
   cd ${INSTALL_DIR} &&
-  /usr/local/bin/wp config create --dbname=${DB_NAME} --dbuser=${DB_USER} --dbpass=${DB_PASS} --allow-root &&
+  /usr/local/bin/wp config create --dbname=${DB_NAME} --dbuser=${DB_USER} --dbpass=${DB_PASS} --skip-salts --allow-root &&
+  for key in AUTH_KEY SECURE_AUTH_KEY LOGGED_IN_KEY NONCE_KEY AUTH_SALT SECURE_AUTH_SALT LOGGED_IN_SALT NONCE_SALT; do
+    /usr/local/bin/wp config set \"\$key\" \"\$(openssl rand -base64 48 | tr -d '\n')\" --type=constant --allow-root || exit 1
+  done &&
   /usr/local/bin/wp core install \
     --url='${SITE_URL}' \
     --title='${SITE_TITLE}' \
